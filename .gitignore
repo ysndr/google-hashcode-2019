@@ -1,0 +1,4 @@
+*.txt.out
+__pycache__/
+.vscode
+.direnv
