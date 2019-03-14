@@ -1,4 +1,6 @@
 from picture import Picture
+from os import environ
+
 
 def parse_file(file):
     with open(file) as f:
@@ -20,41 +22,41 @@ def prepare(pictures_):
     pictures = dict()
     tags = dict()
 
-
     picture_h = [pic for pic in pictures_ if pic.rotation == "H"]
-    
+
     picture_v = [pic for pic in pictures_ if pic.rotation == "V"]
-    picture_v = sorted(picture_v, key = lambda p: len(p.tags))
+    picture_v = sorted(picture_v, key=lambda p: len(p.tags))
 
     picture_v = zip(
         picture_v[:len(picture_v)//2],
         reversed(picture_v[len(picture_v)//2:])
     )
 
-    picture_vv = [Picture(a.id + " " + b.id, "H", a.tags.union(b.tags)) for (a, b) in picture_v]
-
+    picture_vv = [Picture(a.id + " " + b.id, "H", a.tags.union(b.tags))
+                  for (a, b) in picture_v]
 
     picture_h.extend(picture_vv)
 
     for picture in picture_h:
-        pictures[picture.id] = picture   
+        pictures[picture.id] = picture
         for tag in picture.tags:
             tags[tag] = tags.get(tag, set([]))
             tags[tag].add(picture.id)
     return (pictures, tags)
+
 
 def run(pictures, tags):
     i = 0
     current = None
     while pictures:
         i += 1
-        if not current: 
-            current = list(pictures.values())[0]     
+        if not current:
+            current = list(pictures.values())[0]
             print("nope")
         print(i)
         yield current.id
         current = next(pictures, tags, current)
-          
+
 
 def next(pictures, tags, current):
     targets = {}
@@ -74,10 +76,11 @@ def next(pictures, tags, current):
 
     return pictures[next_one]
 
-    
-
 
 if __name__ == "__main__":
+
+    exit(0)
+
     for f in [
         "a_example.txt",
         "b_lovely_landscapes.txt",
