@@ -27,24 +27,28 @@ with  import pkgs.path {
     })];
   };
 let
-
-
-  
   # ------------- Python ----------------
   # for build usage only
-  
-  python = python3.withPackages(pp: with pp; [
+
+  python' = python3.override {  
+    packageOverrides = self: super: {
+      pylint = super.pylint.overridePythonAttrs(old: rec {
+        doCheck = false;  
+      });
+    };
+  };
+
+  python-env = python'.withPackages(pp: with pp; [
       ipython
       pip
       virtualenv
-      pylint.overridePythonAttrs (oldAttrs: { checkPhase = false; })
+      pylint
       autopep8
-    ]);
-
+  ]);
   # --------------- Commands ----------------
 
 
 in {
   #inherit (pkgs)  libyaml libiconv;
-  inherit python;
+  python-env = python-env;
 } 

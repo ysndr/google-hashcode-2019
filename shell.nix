@@ -5,11 +5,11 @@ let
       { inherit pinned; } //
       (if (isNull pinned) then { inherit pkgs; } else {});
 in with project.pkgs;
-
 mkShell {
+  name = "google-hashcode-env";
   buildInputs = [
     # put packages here.
-    project.python
+    project.python-env
   ];
 
   shellHook = ''
