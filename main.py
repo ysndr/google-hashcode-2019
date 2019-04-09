@@ -7,7 +7,7 @@ def parse_file(file):
         f.readline()
         pictures = []
         for line, content in enumerate(f.readlines()):
-            content_split = content.split(" ")
+            content_split = content.strip().split(" ")
             rotation = content_split[0]
             tags = set([str(x) for x in content_split[2:]])
             pictures.append(Picture(str(line), rotation, tags))
@@ -67,6 +67,8 @@ def next(pictures, tags, current):
                 continue
             targets[neighbour_id] = targets.get(neighbour_id, 0) + 1
 
+    for ptag in pictures[current.id].tags:
+        tags[ptag].remove(current.id)
     del pictures[current.id]
 
     if not targets:
@@ -79,13 +81,11 @@ def next(pictures, tags, current):
 
 if __name__ == "__main__":
 
-    exit(0)
-
     for f in [
-        "a_example.txt",
-        "b_lovely_landscapes.txt",
-        "c_memorable_moments.txt",
-        "d_pet_pictures.txt",
+        #"a_example.txt",
+        #"b_lovely_landscapes.txt",
+        #"c_memorable_moments.txt",
+        #"d_pet_pictures.txt",
         "e_shiny_selfies.txt"
     ]:
         (pictures, tags) = prepare(parse_file(f))
